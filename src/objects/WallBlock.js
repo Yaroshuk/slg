@@ -1,4 +1,4 @@
-import BaseObject from './BaseObject';
+import BaseObject from '../grid/BaseGridObject';
 import { textures } from '../utils/graphics';
 
 class WallBlock extends BaseObject {

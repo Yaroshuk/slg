@@ -1,6 +1,6 @@
 import Consts from '../utils/consts';
 
-class BaseObject extends Phaser.GameObjects.Image {
+class BaseGridObject extends Phaser.GameObjects.Image {
     constructor(scene, x, y, texture, cell = '0') {
         super(scene, 0, 0, texture);
 
@@ -57,4 +57,4 @@ class BaseObject extends Phaser.GameObjects.Image {
     }
 }
 
-export default BaseObject;
+export default BaseGridObject;

@@ -1,15 +1,16 @@
-import BaseObject from './BaseObject';
+import BaseObject from '../grid/BaseGridObject';
 import { textures } from '../utils/graphics';
 
 class PlayerBlock extends BaseObject {
-    constructor(scene, x, y, data) {
+    constructor(scene, x, y, config) {
+        console.log('fffg', scene, x, y)
         super(scene, x, y, textures.playerBlock, 'X');
 
-        console.log(data)
+        console.log(config)
 
         this.setInteractive();
 
-        this.on('click', data.handleChangeController);
+        this.on('click', config.handleChangeController);
     }
 }
 

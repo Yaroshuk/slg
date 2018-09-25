@@ -1,4 +1,5 @@
 import Consts from '../utils/consts';
+import Grid from '../grid/Grid';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
@@ -16,6 +17,13 @@ class Level extends Phaser.Scene {
             '111111111'
         ];
 
+        this.test2Level = [
+            ['1', '1', '1', '1'],
+            ['1', '0', '0', '1'],
+            ['1', '0', '0', '1'],
+            ['1', '1', '1', '1']
+        ]
+
         this.startY = 0;
         this.startX = 0;
         this.controllerActive = false;
@@ -27,14 +35,20 @@ class Level extends Phaser.Scene {
         this.solidBlocks = '1X';
 
         this.handleChangeController = this.handleChangeController.bind(this);
+
+        this.grid;
     }
 
     create() {
-        this.setLevelCord();
-        this.levelGenerator();
+        this.grid = new Grid(this, 4, 4);
+        //this.grid.creator.wall(0, 1);
+
+        //this.setLevelCord();
+        //this.levelGenerator();
 
         this.controller = new PlayerControl(this, 2, 1);
         this.children.add(this.controller);
+        this.children.add(this.grid.children);
     }
 
     levelGenerator() {
