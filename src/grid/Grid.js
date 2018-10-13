@@ -10,9 +10,12 @@ class Grid {
         this.cSize = config.size || Consts.baseSize;
         this.x = config.x || 0;
         this.y = config.y || 0;
-        this.objectsArray = [];
-        this.previousMap = this.generateStarterMap(width, height);
-        this.currentMap = this.generateStarterMap(width, height);
+        this.objectsArray = this.generateStarterObjectArray(width, height);
+        
+        this.startMap = this.generateStarterMap(width, height);
+        
+        this.previousMap = this.startMap;
+        this.currentMap = this.startMap;
         this.children;
         this.creator;
 
@@ -38,13 +41,27 @@ class Grid {
         this.children.y = y;
     }
 
-    generateStarterMap(width, height, defaultCKey = Consts.objectKeys.empty) {
+    generateStarterObjectArray(width, height) {
         const result = [];
 
         for(let y = 0, max = height; y < max; y++) {
             const yLine = [];
 
-            this.objectsArray.push([]);
+            for (let x = 0, max = width; x < max; x++) {
+                yLine[x] = null;
+            }
+
+            result[y] = yLine;
+        }
+
+        return result;
+    }
+
+    generateStarterMap(width, height, defaultCKey = Consts.objectKeys.empty) {
+        const result = [];
+
+        for(let y = 0, max = height; y < max; y++) {
+            const yLine = [];
 
             for (let x = 0, max = width; x < max; x++) {
                 yLine[x] = defaultCKey;
@@ -72,7 +89,7 @@ class Grid {
         return key;
     }
 
-    changeMap(key = Consts.objectKeys.empty, x, y) { //TODO: fix it
+    setMapKey(key = Consts.objectKeys.empty, x, y) { //TODO: fix it
         this.previousMap = this.currentMap.map(yLine => [...yLine]);
         
         this.currentMap = this.currentMap.map((yLine, inx) => {
@@ -86,11 +103,24 @@ class Grid {
         });
     }
 
+    setMapObject(obj, x, y) { //TODO: fix it
+        this.objectsArray = this.objectsArray.map((yLine, inx) => {
+            const line = [...yLine];
+
+            if(inx === y) {
+                line[x] = obj;
+            } 
+
+            return line;
+        });
+    }
+
     addObject(obj, x, y) {
         if (!obj) return;
 
-        this.objectsArray[y][x] = obj; //TODO: repeat like a changeMap
-        this.changeMap(obj.key, x, y);
+        this.setMapObject(obj, x, y);
+        this.setMapKey(obj.key, x, y);
+        console.log(this.currentMap, this.previousMap)
         this.children.add(obj)
     }
 
