@@ -10,12 +10,8 @@ class Grid {
         this.cSize = config.size || Consts.baseSize;
         this.x = config.x || 0;
         this.y = config.y || 0;
-        this.objectsArray = this.generateStarterObjectArray(width, height);
-        
-        this.startMap = this.generateStarterMap(width, height);
-        
-        this.previousMap = this.startMap;
-        this.currentMap = this.startMap;
+
+        this.cellsConfig = this.generateStarterCellsConfig(width, height);
         this.children;
         this.creator;
 
@@ -41,40 +37,54 @@ class Grid {
         this.children.y = y;
     }
 
-    generateStarterObjectArray(width, height) {
-        const result = [];
+    generateStarterCellsConfig(width, height) {
+        const result = {};
 
         for(let y = 0, max = height; y < max; y++) {
-            const yLine = [];
-
             for (let x = 0, max = width; x < max; x++) {
-                yLine[x] = null;
+                result[this.getCellsConfigName(x, y)] = {
+                    currentKey: Consts.objectKeys.empty,
+                    previousKey: Consts.objectKeys.empty,
+                    obj: null
+                }
             }
-
-            result[y] = yLine;
         }
 
         return result;
     }
 
-    generateStarterMap(width, height, defaultCKey = Consts.objectKeys.empty) {
-        const result = [];
+    getCellsConfigName(x, y) {
+        return `${x}${y}`;
+    }
 
-        for(let y = 0, max = height; y < max; y++) {
-            const yLine = [];
+    setCellsConfigOptions(x, y, options) { //TODO: refactor
+        const newConfig = Object.assign({}, this.cellsConfig[this.getCellsConfigName(x, y)]);
 
-            for (let x = 0, max = width; x < max; x++) {
-                yLine[x] = defaultCKey;
+        for(let key in options) {
+            if (options.hasOwnProperty(key)) {
+                newConfig[key] = options[key];
             }
+        } 
 
-            result[y] = yLine;
-        }
+        this.cellsConfig = Object.assign({}, this.cellsConfig, {[this.getCellsConfigName(x, y)]: newConfig})
+    }
 
-        return result;
+    getCellsConfigOptions(x, y) {
+        return this.cellsConfig[this.getCellsConfigName(x, y)];
+    }
+
+    setCellsConfigObj(x, y, obj) {
+        const cellConfig = this.getCellsConfigOptions(x, y);
+        
+        this.setCellsConfigOptions(x, y, {
+            currentKey: obj ? obj.key : '0',
+            previousKey: cellConfig.currentKey,
+            obj
+        });
     }
 
     getCellObject(x, y) {
-        const obj = this.objectsArray[y][x];
+        const obj = this.getCellsConfigOptions(x, y).obj;
 
         if (!obj) return null;
 
@@ -82,45 +92,33 @@ class Grid {
     }
 
     getCellKey(x, y) {
-        const key = this.currentMap[y][x];
+        const key = this.getCellsConfigOptions(x, y).currentKey;
 
         if (!key) return null;
 
         return key;
     }
 
-    setMapKey(key = Consts.objectKeys.empty, x, y) { //TODO: fix it
-        this.previousMap = this.currentMap.map(yLine => [...yLine]);
+    moveObject(obj, newX = 0, newY = 0, keyInstead = Consts.objectKeys.empty) { //TODO: add cords check
+        if (!obj || this.getCellObject(obj.XX, obj.YY) !== obj) return;
+
+        const oldX = obj.XX;
+        const oldY = obj.YY;
+
+        if (obj.XX !== newX || obj.YY !== newY) {
+            obj.setNormalPosition(newX, newY);
+        }
         
-        this.currentMap = this.currentMap.map((yLine, inx) => {
-            const line = [...yLine];
+        this.setCellsConfigObj(newX, newY, obj);
 
-            if(inx === y) {
-                line[x] = key;
-            } 
-
-            return line;
-        });
-    }
-
-    setMapObject(obj, x, y) { //TODO: fix it
-        this.objectsArray = this.objectsArray.map((yLine, inx) => {
-            const line = [...yLine];
-
-            if(inx === y) {
-                line[x] = obj;
-            } 
-
-            return line;
-        });
+        this.setCellsConfigObj(oldX, oldY, null);
     }
 
     addObject(obj, x, y) {
         if (!obj) return;
 
-        this.setMapObject(obj, x, y);
-        this.setMapKey(obj.key, x, y);
-        console.log(this.currentMap, this.previousMap)
+        this.setCellsConfigObj(x, y, obj);
+        console.log(this.cellsConfig)
         this.children.add(obj)
     }
 

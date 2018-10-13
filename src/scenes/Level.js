@@ -41,11 +41,14 @@ class Level extends Phaser.Scene {
 
     create() {
         this.grid = new Grid(this, 4, 4);
-        this.grid.creator.createFromKey(Consts.objectKeys.wall, 1, 1);
+        const block = this.grid.creator.createFromKey(Consts.objectKeys.wall, 1, 1);
         this.grid.creator.createFromKey(Consts.objectKeys.wall, 2, 1);
         this.grid.creator.createFromKey(Consts.objectKeys.wall, 3, 1);
+        this.grid.creator.createFromKey(Consts.objectKeys.player, 3, 1);
 
-        console.log(this.grid.getCellKey(0, 1));
+        this.grid.moveObject(block);
+
+        console.log(this.grid.cellsConfig);
 
         this.controller = new PlayerControl(this, 2, 1);
         this.children.add(this.controller);

@@ -29,12 +29,14 @@ class GridCreator {
     }
 
     player(x, y, config = {}) {
+        config.grid = this.grid;
         const result = new PlayerBlock(this.scene, x, y, config)
         this.createFunc(result, x, y);
         return result;
     }
 
     wall(x, y, config = {}) {
+        config.grid = this.grid;
         const result = new WallBlock(this.scene, x, y, config)
         this.createFunc(result, x, y);
         return result;
