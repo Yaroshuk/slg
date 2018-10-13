@@ -1,7 +1,7 @@
 import Consts from '../utils/consts';
 
 class BaseGridObject extends Phaser.GameObjects.Image {
-    constructor(scene, x, y, texture, cell = '0') {
+    constructor(scene, x, y, texture, key = '0') {
         super(scene, 0, 0, texture);
 
         this.originY = 1;
@@ -12,7 +12,7 @@ class BaseGridObject extends Phaser.GameObjects.Image {
 
         this.pointerDown = false;
 
-        this.cell = cell;
+        this.key = key;
 
 
         //TODO:refactor
