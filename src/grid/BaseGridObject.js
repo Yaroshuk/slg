@@ -7,8 +7,8 @@ class BaseGridObject extends Phaser.GameObjects.Image {
         this.originY = 1;
         this.originX = 0.5;
 
-        this.startX = scene.startX;
-        this.startY = scene.startY;
+        this.startX = 0;
+        this.startY = 0;
 
         this.pointerDown = false;
 
@@ -50,6 +50,13 @@ class BaseGridObject extends Phaser.GameObjects.Image {
 
         this.x = this.getNormalX();
         this.y = this.getNormalY();
+    }
+
+    setStartPosition(x = 0, y = 0) {
+        this.startX = x;
+        this.startY = y;
+
+        this.setNormalPosition(this.XX, this.YY);
     }
 
     create() {

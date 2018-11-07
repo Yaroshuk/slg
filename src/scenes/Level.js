@@ -1,10 +1,11 @@
+import BaseScene from './BaseIsoScene';
 import Consts from '../utils/consts';
 import Grid from '../grid/Grid';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
 
-class Level extends Phaser.Scene {
+class Level extends BaseScene {
     constructor() {
         super({key: 'Level'})
 
@@ -24,8 +25,6 @@ class Level extends Phaser.Scene {
             ['1', '1', '1', '1']
         ]
 
-        this.startY = 0;
-        this.startX = 0;
         this.controllerActive = false;
         this.player = null;
 
@@ -41,18 +40,19 @@ class Level extends Phaser.Scene {
 
     create() {
         this.grid = new Grid(this, 4, 4);
-        const block = this.grid.creator.createFromKey(Consts.objectKeys.wall, 1, 1);
-        this.grid.creator.createFromKey(Consts.objectKeys.wall, 2, 1);
-        this.grid.creator.createFromKey(Consts.objectKeys.wall, 3, 1);
-        this.grid.creator.createFromKey(Consts.objectKeys.player, 3, 1);
-
-        this.grid.moveObject(block);
+         this.grid.creator.createFromKey(Consts.objectKeys.wall, 1, 3);
+         this.grid.creator.createFromKey(Consts.objectKeys.wall, 1, 2);
+         this.grid.creator.createFromKey(Consts.objectKeys.wall, 1, 1);
 
         console.log(this.grid.cellsConfig);
 
         this.controller = new PlayerControl(this, 2, 1);
-        this.children.add(this.controller);
-        this.children.add(this.grid.children);
+    }
+
+    update() {
+        super.update();
+
+        console.log(this.children)
     }
 
     levelGenerator() {

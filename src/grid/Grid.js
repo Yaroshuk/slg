@@ -18,15 +18,11 @@ class Grid {
         this.addObject = this.addObject.bind(this);
 
         this.initialSetup();
-        this.create();
     }
 
     initialSetup() {
-        this.children = new Phaser.GameObjects.Container(this.scene, this.x, this.y);
+        this.children = new Phaser.GameObjects.Group(this.scene); //, this.x, this.y
         this.creator = new GridCreator(this, this.addObject);
-    }
-
-    create() {
     }
 
     setPosition(x = 0, y = 0) {
@@ -105,21 +101,43 @@ class Grid {
         const oldX = obj.XX;
         const oldY = obj.YY;
 
-        if (obj.XX !== newX || obj.YY !== newY) {
-            obj.setNormalPosition(newX, newY);
+        let newCorrectX = newX;
+        let newCorrectY = newY;
+
+        if (newCorrectX > this.gWidth - 1) {
+            newCorrectX = this.gWidth - 1;
+        }
+
+        if (newCorrectY > this.gHeight - 1) {
+            newCorrectY = this.gHeight - 1;
+        }
+
+        if (obj.XX !== newCorrectX || obj.YY !== newCorrectY) {
+            obj.setNormalPosition(newCorrectX, newCorrectY);
         }
         
-        this.setCellsConfigObj(newX, newY, obj);
+        this.setCellsConfigObj(newCorrectX, newCorrectY, obj);
 
         this.setCellsConfigObj(oldX, oldY, null);
+
+        this.children.sort('y');
+    }
+
+    setGridPosition(x = 0, y = 0) {
+        this.x = x;
+        this.y = y;
+
+        this.children.children.entries.forEach(elem => {
+            elem.setStartPosition(this.x, this.y);
+        })
     }
 
     addObject(obj, x, y) {
         if (!obj) return;
 
+        obj.setStartPosition(this.x, this.y);
         this.setCellsConfigObj(x, y, obj);
-        console.log(this.cellsConfig)
-        this.children.add(obj)
+        this.children.add(obj, true);
     }
 
 }
