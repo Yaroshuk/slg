@@ -5,7 +5,10 @@ class BaseIsoScene extends Phaser.Scene {
 
     update() {
         this.children.list.forEach((elem) => {
-            elem.depth = parseFloat(`${1}.${elem.y}`);
+            if (elem.staticDepth) {
+                return elem.depth = elem.staticDepth;
+            }
+            elem.depth = elem.y;
         });
     }
 }

@@ -95,6 +95,10 @@ class Grid {
         return key;
     }
 
+    isEmptyCell(x, y) {
+        return this.getCellKey(x, y) === Consts.objectKeys.empty;
+    }
+
     moveObject(obj, newX = 0, newY = 0, keyInstead = Consts.objectKeys.empty) { //TODO: add cords check
         if (!obj || this.getCellObject(obj.XX, obj.YY) !== obj) return;
 
