@@ -3,8 +3,8 @@ import BaseObject from '../grid/BaseGridObject';
 import { textures } from '../utils/graphics';
 
 class WallBlock extends BaseObject {
-    constructor(scene, x, y) {
-        super(scene, x, y, textures.wallBlock, Consts.objectKeys.wall);
+    constructor(scene, x, y, config) {
+        super(scene, x, y, textures.wallBlock, Consts.objectKeys.wall, config);
     }
 }
 

@@ -11,9 +11,9 @@ class Level extends BaseScene {
 
         this.testLevel = [
             ['1', '1', '1', '1', '1'],
-            ['1', 'X', '0', '0', '1'],
             ['1', '0', '0', '0', '1'],
-            ['1', '0', '0', '0', '1'],
+            ['1', '0', 'X', '0', '1'],
+            ['1', '0', '0', '1', '1'],
             ['1', '0', '0', 'X', '1'],
             ['1', '1', '1', '1', '1']
         ]
@@ -26,18 +26,11 @@ class Level extends BaseScene {
 
         this.solidBlocks = '1X';
 
-        this.handleChangeController = this.handleChangeController.bind(this);
-
         this.grid;
     }
 
     create() {
         this.levelGenerator();
-
-        this.cntr = new PlayerControl(this, 125, 100-15);
-        console.log(this.cntr);
-        this.children.add(this.cntr);
-        //this.cntr.activate(1, 1);
     }
 
     update() {
@@ -55,25 +48,6 @@ class Level extends BaseScene {
                 this.grid.creator.createFromKey(code, xInx, yInx);
             })
         })
-    }
-
-    handleChangeController() {
-        this.playerMove();
-
-        if (this.controllerActive) 
-            this.setControllerDeactive();
-        else 
-            this.setControllerActive();
-    }
-
-    setControllerActive() {
-        this.controllerActive = true;
-        this.controller.activate(this.player.XX + 1, this.player.YY);
-    }
-
-    setControllerDeactive() {
-        this.controllerActive = false;
-        this.controller.deactivate();
     }
 }
 

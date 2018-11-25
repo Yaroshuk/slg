@@ -1,7 +1,8 @@
+import BaseInteractiveObject from './BaseInteractiveObject';
 import Consts from '../utils/consts';
 
-class BaseGridObject extends Phaser.GameObjects.Image {
-    constructor(scene, x, y, texture, key = '0') {
+class BaseGridObject extends BaseInteractiveObject {
+    constructor(scene, x, y, texture, key = '0', config) {
         super(scene, 0, 0, texture);
 
         this.originY = 1;
@@ -10,46 +11,35 @@ class BaseGridObject extends Phaser.GameObjects.Image {
         this.startX = 0;
         this.startY = 0;
 
-        this.pointerDown = false;
-
         this.key = key;
 
-
-        //TODO:refactor
-        this.addListener('pointerdown', () => {
-            this.pointerDown = true;
-        })
-
-        this.addListener('pointerup', () => {
-            if (!this.pointerDown) return;
-
-            this.pointerDown = false;
-            this.emit('click');
-        })
+        this.grid = config.grid;
 
         this.setNormalPosition(x, y);
 
         this.create();
     }
 
-    getNormalX() {
-        const {startX, baseSize} = Consts;
+    // getNormalX() {
+    //     const {startX, baseSize} = Consts;
 
-        return this.startX + (this.XX * baseSize) + baseSize/2;
-    }
+    //     return this.startX + (this.XX * baseSize) + baseSize/2;
+    // }
 
-    getNormalY() {
-        const {startY, baseSize, isoHeight} = Consts;
+    // getNormalY() {
+    //     const {startY, baseSize, isoHeight} = Consts;
 
-        return (this.startY + this.YY * baseSize + baseSize/2) + baseSize/2 - isoHeight; //TODO: исправить формулу
-    }
+    //     return (this.startY + this.YY * baseSize + baseSize/2) + baseSize/2 - isoHeight; //TODO: исправить формулу
+    // }
 
     setNormalPosition(x, y) {
         this.XX = x;
         this.YY = y;
 
-        this.x = this.getNormalX();
-        this.y = this.getNormalY();
+        console.log('grid', this.grid);
+
+        this.x = this.grid.getNormalX(x);
+        this.y = this.grid.getNormalY(y);
     }
 
     setStartPosition(x = 0, y = 0) {

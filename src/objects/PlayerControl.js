@@ -1,13 +1,16 @@
-import BaseObject from '../grid/BaseGridObject';
+import BaseObject from '../grid/BaseInteractiveObject';
 import { textures } from '../utils/graphics';
 
-class PlayerControl extends Phaser.GameObjects.Image {
-    constructor(scene, x, y) {
+class PlayerControl extends BaseObject {
+    constructor(scene, x, y, handleClick, direction) {
         super(scene, x, y, textures.playerControl);
 
         this.staticDepth = 9999;
 
         this.deactivate();
+        this.setInteractive();
+
+        this.on('click', () => {handleClick(direction)});
     }
 
     activate(x = 0, y = 0) {

@@ -33,6 +33,16 @@ class Grid {
         this.children.y = y;
     }
 
+    getNormalX(x) {
+        return this.x + (x * this.cSize) + this.cSize/2;
+    }
+
+    getNormalY(y) {
+        const {isoHeight} = Consts;
+
+        return (this.y + y * this.cSize + this.cSize/2) + this.cSize/2 - isoHeight; //TODO: исправить формулу
+    }
+
     generateStarterCellsConfig(width, height) {
         const result = {};
 
@@ -124,7 +134,7 @@ class Grid {
 
         this.setCellsConfigObj(oldX, oldY, null);
 
-        this.children.sort('y');
+        //this.children.sort('y');
     }
 
     setGridPosition(x = 0, y = 0) {
@@ -140,6 +150,7 @@ class Grid {
         if (!obj) return;
 
         obj.setStartPosition(this.x, this.y);
+        obj.grid = this;
         this.setCellsConfigObj(x, y, obj);
         this.children.add(obj, true);
     }
