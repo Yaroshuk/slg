@@ -5,6 +5,8 @@ class PlayerController {
         this.player = player;
 
         this.scene = player.scene;
+        this.baseSize = this.scene.baseSize;
+        this.isoHeight = this.scene.isoHeight
 
         this.cntrls = [];
         this.top;
@@ -35,19 +37,19 @@ class PlayerController {
         console.log(this.scene.grid.isEmptyCell(1, 3));
         
         if (this.scene.grid.isEmptyCell(plX, plY - 1)) {
-            this.top.activate(this.player.x, this.player.y - 50);
+            this.top.activate(this.player.x, this.player.y - this.baseSize);
         }
 
         if (this.scene.grid.isEmptyCell(plX - 1, plY)) {
-            this.left.activate(this.player.x - 50, this.player.y);
+            this.left.activate(this.player.x - this.baseSize, this.player.y);
         }
 
         if (this.scene.grid.isEmptyCell(plX, plY + 1)) {
-            this.bottom.activate(this.player.x, this.player.y + 50);
+            this.bottom.activate(this.player.x, this.player.y + this.baseSize);
         }
 
         if (this.scene.grid.isEmptyCell(plX + 1, plY)) {
-            this.right.activate(this.player.x + 50, this.player.y);
+            this.right.activate(this.player.x + this.baseSize, this.player.y);
         }
     }
 

@@ -1,9 +1,9 @@
 import BaseInteractiveObject from './BaseInteractiveObject';
-import Consts from '../utils/consts';
+import {getTextureName} from '../utils/graphics';
 
 class BaseGridObject extends BaseInteractiveObject {
     constructor(scene, x, y, texture, key = '0', config) {
-        super(scene, 0, 0, texture);
+        super(scene, 0, 0, getTextureName(texture, config.grid.cSize));
 
         this.originY = 1;
         this.originX = 0.5;
@@ -36,8 +36,6 @@ class BaseGridObject extends BaseInteractiveObject {
         this.XX = x;
         this.YY = y;
 
-        console.log('grid', this.grid);
-
         this.x = this.grid.getNormalX(x);
         this.y = this.grid.getNormalY(y);
     }
@@ -50,7 +48,7 @@ class BaseGridObject extends BaseInteractiveObject {
     }
 
     create() {
-        console.log('CREATE', this.startX, this.startY)
+        // console.log('CREATE', this.startX, this.startY)
     }
 }
 

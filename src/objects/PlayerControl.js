@@ -1,9 +1,9 @@
 import BaseObject from '../grid/BaseInteractiveObject';
-import { textures } from '../utils/graphics';
+import { textures, getTextureName } from '../utils/graphics';
 
 class PlayerControl extends BaseObject {
     constructor(scene, x, y, handleClick, direction) {
-        super(scene, x, y, textures.playerControl);
+        super(scene, x, y, getTextureName(textures.playerControl, scene.baseSize));
 
         this.staticDepth = 9999;
 

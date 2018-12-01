@@ -1,6 +1,7 @@
 import BaseScene from './BaseIsoScene';
 import Consts from '../utils/consts';
 import Grid from '../grid/Grid';
+import graphicsGenerator from '../utils/graphics';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
@@ -13,8 +14,6 @@ class Level extends BaseScene {
             ['1', '1', '1', '1', '1'],
             ['1', '0', '0', '0', '1'],
             ['1', '0', 'X', '0', '1'],
-            ['1', '0', '0', '1', '1'],
-            ['1', '0', '0', 'X', '1'],
             ['1', '1', '1', '1', '1']
         ]
 
@@ -26,7 +25,17 @@ class Level extends BaseScene {
 
         this.solidBlocks = '1X';
 
+        this.baseSize = 50;
+        this.isoHeight = 15;
+        this.borderOffset = 25;
+        this.topOffset = 50;
+
         this.grid;
+    }
+
+    preload() {
+        this.levelSetup();
+        graphicsGenerator(this, this.baseSize, this.isoHeight);
     }
 
     create() {
@@ -37,11 +46,57 @@ class Level extends BaseScene {
         super.update();
     }
 
-    levelGenerator() {
-        const gridH = this.testLevel.length;
-        const gridW = this.testLevel[0].length;
+    levelSetup() {
+        const game = this.game;
+        this.gameW = game.config.width;
+        this.gameH = game.config.height;
 
-        this.grid = new Grid(this, gridW, gridH);
+        this.gridH = this.testLevel.length;
+        this.gridW = this.testLevel[0].length;
+
+        const maxWidth = this.gameW - this.borderOffset * 2;
+        const maxHeight = this.gameH - (this.topOffset + this.borderOffset * 2);
+
+        const realWidth = this.baseSize * this.gridW;
+        const realHeight = this.baseSize * this.gridH + this.isoHeight;
+        console.log(maxWidth, maxHeight, realWidth, realHeight);
+        if (realWidth > maxWidth) { //TODO: refactor
+            if (realHeight > maxHeight) {
+                if (realWidth - maxWidth > realHeight - maxHeight) {
+                    this.baseSize = Math.round(maxWidth/this.gridW);
+                } else {
+                    this.baseSize = Math.round((maxHeight-15)/this.gridH);
+                }
+            } else {
+                this.baseSize = Math.round(maxWidth/this.gridW);
+            }
+        }
+
+        if (realHeight > maxHeight) {
+            if (realWidth > maxWidth) {
+                if (realWidth - maxWidth > realHeight - maxHeight) {
+                    this.baseSize = Math.round(maxWidth/this.gridW);
+                } else {
+                    this.baseSize = Math.round((maxHeight-15)/this.gridH);
+                }
+            } else {
+                this.baseSize = Math.round((maxHeight-15)/this.gridH);
+            }
+        }
+
+        this.isoHeight = Math.round(this.baseSize * 0.23) //23% TODO: refactor with const
+        console.log('fff', this)
+    }
+
+    levelGenerator() {
+        let gridX = (this.gameW - this.baseSize * this.gridW)/2;
+        let gridY = (this.gameH - (this.baseSize * this.gridH - this.isoHeight))/2;
+
+        if (gridY < this.topOffset + this.borderOffset) {
+            gridY = this.topOffset + this.borderOffset;
+        }
+
+        this.grid = new Grid(this, this.gridW, this.gridH, {size: this.baseSize, isoHeight: this.isoHeight, x: gridX, y: gridY});
 
         this.testLevel.forEach((levelLine, yInx) => {
             levelLine.forEach((code, xInx) => {

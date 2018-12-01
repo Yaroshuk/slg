@@ -8,6 +8,7 @@ class Grid {
         this.gHeight = height;
         this.cOffset = config.offset || 0; 
         this.cSize = config.size || Consts.baseSize;
+        this.isoHeight = config.isoHeight || Consts.isoHeight;
         this.x = config.x || 0;
         this.y = config.y || 0;
 
@@ -38,9 +39,7 @@ class Grid {
     }
 
     getNormalY(y) {
-        const {isoHeight} = Consts;
-
-        return (this.y + y * this.cSize + this.cSize/2) + this.cSize/2 - isoHeight; //TODO: исправить формулу
+        return (this.y + y * this.cSize + this.cSize/2) + this.cSize/2 - this.isoHeight; //TODO: исправить формулу
     }
 
     generateStarterCellsConfig(width, height) {
