@@ -12,8 +12,16 @@ class Level extends BaseScene {
 
         this.testLevel = [
             ['1', '1', '1', '1', '1'],
-            ['1', '0', '0', '0', '1'],
+            ['1', '0', 'F', '0', '1'],
             ['1', '0', 'X', '0', '1'],
+            ['1', '0', '0', '1', '1'],
+            ['1', '1', '0', '1', '1'],
+            ['1', '1', '0', '0', '1'],
+            ['1', '0', 'X', '0', '1'],
+            ['1', '1', '1', 'F', '1'],
+            ['1', '1', '1', '1', '1'],
+            ['1', '1', '1', '1', '1'],
+            ['1', '1', '1', '1', '1'],
             ['1', '1', '1', '1', '1']
         ]
 
@@ -31,6 +39,8 @@ class Level extends BaseScene {
         this.topOffset = 50;
 
         this.grid;
+
+        this.handlePlayerFinished = this.handlePlayerFinished.bind(this);
     }
 
     preload() {
@@ -103,6 +113,13 @@ class Level extends BaseScene {
                 this.grid.creator.createFromKey(code, xInx, yInx);
             })
         })
+    }
+
+    handlePlayerFinished(player, x, y) {
+        const finish = this.grid.getCellObject(x, y);
+        this.grid.removeObject(finish);
+        this.grid.removeObject(player);
+        this.grid.creator.wall(x, y);
     }
 }
 

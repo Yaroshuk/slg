@@ -15,6 +15,9 @@ class BaseGridObject extends BaseInteractiveObject {
 
         this.grid = config.grid;
 
+        this.solidBlocks = '1X';
+        this.activeBlocks = 'F';
+
         this.setNormalPosition(x, y);
 
         this.create();

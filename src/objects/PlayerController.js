@@ -35,20 +35,22 @@ class PlayerController {
         const plX = this.player.XX;
         const plY = this.player.YY;
         console.log(this.scene.grid.isEmptyCell(1, 3));
+
+        const solidBlocks = this.player.solidBlocks;
         
-        if (this.scene.grid.isEmptyCell(plX, plY - 1)) {
+        if (!solidBlocks.includes(this.scene.grid.getCellKey(plX, plY - 1))) {
             this.top.activate(this.player.x, this.player.y - this.baseSize);
         }
 
-        if (this.scene.grid.isEmptyCell(plX - 1, plY)) {
+        if (!solidBlocks.includes(this.scene.grid.getCellKey(plX - 1, plY))) {
             this.left.activate(this.player.x - this.baseSize, this.player.y);
         }
 
-        if (this.scene.grid.isEmptyCell(plX, plY + 1)) {
+        if (!solidBlocks.includes(this.scene.grid.getCellKey(plX, plY + 1))) {
             this.bottom.activate(this.player.x, this.player.y + this.baseSize);
         }
 
-        if (this.scene.grid.isEmptyCell(plX + 1, plY)) {
+        if (!solidBlocks.includes(this.scene.grid.getCellKey(plX + 1, plY))) {
             this.right.activate(this.player.x + this.baseSize, this.player.y);
         }
     }

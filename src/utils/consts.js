@@ -5,7 +5,8 @@ const startY = 50;
 const objectKeys = {
     empty: '0',
     wall: '1',
-    player: 'X' 
+    player: 'X',
+    finish: 'F' 
 } 
 
 export default {

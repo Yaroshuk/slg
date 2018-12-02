@@ -1,5 +1,6 @@
 export const textures = {
-    wallBlock: 'WallBlock',
+    wallBlock: 'wallBlock',
+    finishBlock: 'finishBlock', 
     playerBlock: 'playerBlock',
     playerControl: 'playerControl'
 }
@@ -36,4 +37,13 @@ export default (scene, baseSize = 50, isoHeight = 15) => {
     graf.fillRoundedRect(0, 0, baseSize, baseSize, baseSize * 0.2);
     graf.strokeRoundedRect(1, 1, baseSize - 2, baseSize - 2, baseSize * 0.2);
     graf.generateTexture(getTextureName(textures.playerControl, baseSize), baseSize, baseSize + isoHeight);
+
+    graf.clear();
+    graf.fillStyle(0xcc9e38);
+    graf.lineStyle(2, 0xffffff);
+    graf.fillRoundedRect(0, isoHeight, baseSize, baseSize, baseSize * 0.2);
+    graf.fillStyle(0xf1bc44);
+    graf.fillRoundedRect(0, 0, baseSize, baseSize, baseSize * 0.2);
+    graf.strokeRoundedRect(1, 1, baseSize - 2, baseSize - 2, baseSize * 0.2);
+    graf.generateTexture(getTextureName(textures.finishBlock, baseSize), baseSize, baseSize + isoHeight);
 }

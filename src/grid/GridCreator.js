@@ -1,6 +1,7 @@
 import Consts from '../utils/consts';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
+import FinishBlock from '../objects/FinishBlock';
 
 class GridCreator {
     constructor(grid, createFunc) {
@@ -10,6 +11,7 @@ class GridCreator {
         this.creatorLinks;
 
         this.wall = this.wall.bind(this);
+        this.finish = this.finish.bind(this);
         this.player = this.player.bind(this);
 
         this.initialSetup();
@@ -18,7 +20,8 @@ class GridCreator {
     initialSetup() {
         this.creatorLinks = {
             [Consts.objectKeys.player]: this.player,
-            [Consts.objectKeys.wall]: this.wall
+            [Consts.objectKeys.wall]: this.wall,
+            [Consts.objectKeys.finish]: this.finish
         }
     }
 
@@ -38,6 +41,13 @@ class GridCreator {
     wall(x, y, config = {}) {
         config.grid = this.grid;
         const result = new WallBlock(this.scene, x, y, config)
+        this.createFunc(result, x, y);
+        return result;
+    }
+
+    finish(x, y, config={}) {
+        config.grid = this.grid;
+        const result = new FinishBlock(this.scene, x, y, config);
         this.createFunc(result, x, y);
         return result;
     }

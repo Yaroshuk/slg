@@ -145,6 +145,15 @@ class Grid {
         })
     }
 
+    removeObject(obj) {
+        const x = obj.XX;
+        const y = obj.YY;
+
+        obj.destroy();
+
+        this.setCellsConfigOptions(x, y, {currentKey: '0', obj: null});
+    }
+
     addObject(obj, x, y) {
         if (!obj) return;
 

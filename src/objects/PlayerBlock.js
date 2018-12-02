@@ -15,14 +15,25 @@ class PlayerBlock extends BaseObject {
 
         this.setInteractive();
         this.on('click', this.handlePlayerClick);
-
-        this.solidBlocks = '1X';
     }
 
     handleChangePostition(dir) {
         this.handlePlayerClick();
 
         const newPost = this.getNewPosition(dir);
+
+        let finishCallback = null;
+
+        if (newPost.activeBlocks.length) {
+            newPost.activeBlocks.forEach(elem => {
+                if (elem.key === Consts.objectKeys.finish && !finishCallback) {
+                    newPost.x = elem.x;
+                    newPost.y = elem.y;
+
+                    finishCallback = () => {this.scene.handlePlayerFinished(this, elem.x, elem.y)};
+                }
+            })
+        }
 
         this.scene.tweens.add({
             targets: this,
@@ -31,7 +42,11 @@ class PlayerBlock extends BaseObject {
             duration: 200,
             ease: 'Circ',
             onComplete: () => {
-                this.grid.moveObject(this, newPost.x, newPost.y);
+                if (finishCallback) {
+                    finishCallback();
+                } else {
+                    this.grid.moveObject(this, newPost.x, newPost.y);
+                }
             }
         })
     }
@@ -39,18 +54,20 @@ class PlayerBlock extends BaseObject {
     getNewPosition(dir) { //TODO: refactor
         let result = {
             x: 0,
-            y: 0
+            y: 0,
+            activeBlocks: []
         }
 
         if (dir === 'right') {
             for (let i = this.XX + 1, max = this.grid.gWidth; i < max; i++) {
                 let cKey = this.grid.getCellKey(i, this.YY);
-
                 if (this.solidBlocks.includes(cKey)) {
                     result.x = i - 1;
                     result.y = this.YY;
 
                     break;
+                } else if (this.activeBlocks.includes(cKey)) {
+                    result.activeBlocks.push({x: i, y: this.YY, key: cKey})
                 }
             }
         }
@@ -63,6 +80,8 @@ class PlayerBlock extends BaseObject {
                     result.y = this.YY;
 
                     break;
+                } else if (this.activeBlocks.includes(cKey)) {
+                    result.activeBlocks.push({x: i, y: this.YY, key: cKey})
                 }
             }
         }
@@ -76,6 +95,8 @@ class PlayerBlock extends BaseObject {
                     result.y = i - 1;
 
                     break;
+                } else if (this.activeBlocks.includes(cKey)) {
+                    result.activeBlocks.push({x: this.XX, y: i, key: cKey})
                 }
             }
         }
@@ -88,6 +109,8 @@ class PlayerBlock extends BaseObject {
                     result.y = i + 1;
 
                     break;
+                } else if (this.activeBlocks.includes(cKey)) {
+                    result.activeBlocks.push({x: this.XX, y: i, key: cKey})
                 }
             }
         }
