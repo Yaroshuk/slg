@@ -1,4 +1,4 @@
-import BaseInteractiveObject from './BaseInteractiveObject';
+import BaseInteractiveObject from '../ui/BaseInteractiveObject';
 import {getTextureName} from '../utils/graphics';
 
 class BaseGridObject extends BaseInteractiveObject {

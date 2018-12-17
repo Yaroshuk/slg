@@ -1,4 +1,4 @@
-import BaseObject from '../grid/BaseInteractiveObject';
+import BaseObject from '../ui/BaseInteractiveObject';
 import { textures, getTextureName } from '../utils/graphics';
 
 class PlayerControl extends BaseObject {

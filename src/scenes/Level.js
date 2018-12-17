@@ -5,6 +5,7 @@ import graphicsGenerator from '../utils/graphics';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
+import Button from '../ui/Button';
 
 class Level extends BaseScene {
     constructor() {
@@ -26,7 +27,7 @@ class Level extends BaseScene {
         ]
 
         this.controllerActive = false;
-        this.player = null;
+        this.players = [];
 
         this.previousLevelState = this.testLevel;
         this.currentLevelState = this.testLevel;
@@ -50,6 +51,7 @@ class Level extends BaseScene {
 
     create() {
         this.levelGenerator();
+        const but = new Button(this, 0, 50);
     }
 
     update() {
@@ -110,16 +112,33 @@ class Level extends BaseScene {
 
         this.testLevel.forEach((levelLine, yInx) => {
             levelLine.forEach((code, xInx) => {
-                this.grid.creator.createFromKey(code, xInx, yInx);
+                if (code === Consts.objectKeys.player) {
+                    this.players.push(this.grid.creator.createFromKey(code, xInx, yInx));
+                } else {
+                    this.grid.creator.createFromKey(code, xInx, yInx);
+                }
             })
         })
     }
 
     handlePlayerFinished(player, x, y) {
+
+        let indx = null;
+        indx = this.players.findIndex((elem) => {
+            return elem === player;
+        })
+
+        if (indx !== null) {
+            this.players.splice(indx, 1);
+        }
         const finish = this.grid.getCellObject(x, y);
         this.grid.removeObject(finish);
         this.grid.removeObject(player);
         this.grid.creator.wall(x, y);
+
+        if (!this.players.length) {
+            console.log('Complete');
+        }
     }
 }
 

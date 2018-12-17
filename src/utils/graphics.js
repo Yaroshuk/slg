@@ -5,6 +5,51 @@ export const textures = {
     playerControl: 'playerControl'
 }
 
+const colors = {
+    'green': 0x1cba76,
+    'greenIso': 0x27f69d
+}
+
+export const drawButton = (graph, width, height, color) => {
+    let isoHeight = height * 0.3; //TODO: refactor
+
+    graph.clear();
+    graph.fillStyle(colors[color]);
+    graph.lineStyle(2, 0xffffff);
+    graph.fillRoundedRect(0, isoHeight, width, height, 10);
+    graph.fillStyle(colors[color + 'Iso']);
+    graph.fillRoundedRect(0, 0, width, height, 10);
+    graph.strokeRoundedRect(1, 1, width - 2, height - 2, 10);
+
+    return graph;
+}
+
+export const drawButtonOver = (graph, width, height, color) => {
+    let isoHeight = height * 0.3 - 3; //TODO: refactor
+
+    graph.clear();
+    graph.fillStyle(colors[color]);
+    graph.lineStyle(2, 0xffffff);
+    graph.fillRoundedRect(0, isoHeight, width, height, 10);
+    graph.fillStyle(colors[color + 'Iso']);
+    graph.fillRoundedRect(0, 0, width, height, 10);
+    graph.strokeRoundedRect(1, 1, width - 2, height - 2, 10);
+
+    return graph;
+}
+
+export const drawButtonDown = (graph, width, height, color) => {
+    let isoHeight = height * 0.3; //TODO: refactor
+
+    graph.clear();
+    graph.fillStyle(colors[color]);
+    graph.lineStyle(2, 0xffffff);
+    graph.fillStyle(colors[color + 'Iso']);
+    graph.fillRoundedRect(0, 0, width, height, 10);
+    graph.strokeRoundedRect(1, 1, width - 2, height - 2, 10);
+
+    return graph;
+}
 //21c6c1
 export const getTextureName = (name, size) => {
     return `${name}-${size}`;
