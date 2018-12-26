@@ -1,7 +1,7 @@
 import BaseScene from './BaseIsoScene';
 import Consts from '../utils/consts';
 import Grid from '../grid/Grid';
-import graphicsGenerator from '../utils/graphics';
+import graphicsGenerator, {drawIconTriangle} from '../utils/graphics';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
@@ -51,7 +51,6 @@ class Level extends BaseScene {
 
     create() {
         this.levelGenerator();
-        const but = new Button(this, 0, 50);
     }
 
     update() {

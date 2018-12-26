@@ -7,11 +7,25 @@ export const textures = {
 
 const colors = {
     'green': 0x1cba76,
-    'greenIso': 0x27f69d
+    'greenIso': 0x27f69d,
+    'blue': 0x21c6c1,
+    'blueIso': 0x27e9f6
 }
 
-export const drawButton = (graph, width, height, color) => {
+export const drawIconTriangle = (graph, width, height, iWidth, iHeight, color = 0xffffff) => {
+    graph.fillStyle(color);
+    graph.fillTriangle(width/2 - iWidth/2, height/2 - iHeight/2, width/2 + iWidth/2, height/2, width/2 - iWidth/2, height/2 + iHeight/2);
+
+    return graph;
+}
+
+export const drawButton = (scene, width, height, color) => {
+    const graph = new Phaser.GameObjects.Graphics(scene);
+
     let isoHeight = height * 0.3; //TODO: refactor
+
+    let trianWidth = width * 0.25;
+    let trianHeight = height * 0.25; 
 
     graph.clear();
     graph.fillStyle(colors[color]);
@@ -24,7 +38,9 @@ export const drawButton = (graph, width, height, color) => {
     return graph;
 }
 
-export const drawButtonOver = (graph, width, height, color) => {
+export const drawButtonOver = (scene, width, height, color) => {
+    const graph = new Phaser.GameObjects.Graphics(scene);
+
     let isoHeight = height * 0.3 - 3; //TODO: refactor
 
     graph.clear();
@@ -38,7 +54,9 @@ export const drawButtonOver = (graph, width, height, color) => {
     return graph;
 }
 
-export const drawButtonDown = (graph, width, height, color) => {
+export const drawButtonDown = (scene, width, height, color) => {
+    const graph = new Phaser.GameObjects.Graphics(scene);
+
     let isoHeight = height * 0.3; //TODO: refactor
 
     graph.clear();

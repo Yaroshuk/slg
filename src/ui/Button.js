@@ -2,11 +2,18 @@ import UI from './UI';
 import {drawButton, drawButtonOver, drawButtonDown} from '../utils/graphics';
 
 const defaultConfig = {
-    habdleClick: () => {},
+    handleClick: () => {},
     width: 100,
     height: 70,
     color: 'green',
-    text: 'Button'
+    type: 'text',
+    text: 'Play',
+    icon: {
+        func: () => {},
+        width: 25,
+        height: 25,
+        color: 0xffffff
+    }
 }
 
 class Button extends UI {
@@ -17,6 +24,12 @@ class Button extends UI {
 
         this.graph;
         this.text;
+
+        this.backNormal;
+        this.backOver;
+        this.backDown;
+
+        this.backArray;
     }
 
     create() {
@@ -30,40 +43,94 @@ class Button extends UI {
 
         this.addInteractive(interactiveConfig);
 
-        this.graph = new Phaser.GameObjects.Graphics(this.scene);
-        this.text = new Phaser.GameObjects.Text(this.scene, this.x, this.y, this.config.text, {fontFamily: 'sans-serif', fontSize: '24px'});
+        this.backgroundInitial();
+    }
+
+    drawWithIcon(drawFunction, iconFunction) {
+        const result = drawFunction(this.scene, this.config.width, this.config.height, this.config.color); 
+
+        const icon = this.config.icon;
+
+        console.log(icon);
+
+        return iconFunction(result, this.config.width, this.config.height, icon.width, icon.height, icon.color);
+    }
+
+    backgroundInitial() {
+        if (this.config.type === 'text') {
+
+            this.backNormal = drawButton(this.scene, this.config.width, this.config.height, this.config.color);
+            this.backOver = drawButtonOver(this.scene, this.config.width, this.config.height, this.config.color);
+            this.backDown = drawButtonDown(this.scene, this.config.width, this.config.height, this.config.color);
+            this.text = new Phaser.GameObjects.Text(this.scene, this.x, this.y, this.config.text, {fontFamily: 'sans-serif', fontSize: '24px'});    
+        
+        } else if (this.config.type === 'icon') {
+
+            this.backNormal = this.drawWithIcon(drawButton, this.config.icon.func);
+            this.backOver = this.drawWithIcon(drawButtonOver, this.config.icon.func);
+            this.backDown = this.drawWithIcon(drawButtonDown, this.config.icon.func);   
+       
+        }
+
+        this.backArray = [];
+
+        this.backArray.push(this.backNormal);
+        this.backArray.push(this.backOver);
+        this.backArray.push(this.backDown);
+
 
         this.centerText();
 
-        drawButton(this.graph, this.config.width, this.config.height, this.config.color);
+        this.backArray.forEach(back => {
+            this.add(back);
+        });
 
-        this.add(this.graph);
-        this.add(this.text);
+        this.setVisibleBackground();
+
+        if (this.config.type === 'text') {
+            this.add(this.text);  
+        }
+    }
+
+    setVisibleBackground(indx = 0) {
+        this.backArray.forEach((elem, index) => {
+            if (index === indx) {
+                elem.setVisible(true);
+            } else {
+                elem.setVisible(false);
+            }
+        })
     }
 
     centerText() {
+        if (this.config.type !== 'text') return;
+
         this.text.x = this.config.width/2 - this.text.width/2;
         this.text.y = this.config.height/2 - this.text.height/2;
     }
 
     handleOver() {
-        drawButtonOver(this.graph, this.config.width, this.config.height, this.config.color);
+        this.setVisibleBackground(1);
+
         this.y = this.YY + 3;
     }
 
     handleOut() {
-        drawButton(this.graph, this.config.width, this.config.height, this.config.color);
+        this.setVisibleBackground(0);
+
         this.y = this.YY;
     }
 
     handleUp() {
-        drawButtonOver(this.graph, this.config.width, this.config.height, this.config.color);
+        this.setVisibleBackground(1);
+
         this.centerText();
         this.y = this.YY + 3;
     }
 
     handleDown() {
-        drawButtonDown(this.graph, this.config.width, this.config.height, this.config.color);
+        this.setVisibleBackground(2);
+
         this.centerText();
         this.y = this.YY + this.config.height * 0.3;
     }

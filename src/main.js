@@ -1,5 +1,6 @@
 import 'phaser';
 import Preloader from './scenes/Preloader';
+import StartMenu from './scenes/StartMenu';
 import Level from './scenes/Level';
 import Test from './scenes/Test';
 
@@ -35,9 +36,10 @@ window.onload = function() {
         canvas: document.getElementById('game'),
         width: 480,
         height: 640,
-        backgroundColor: 0x222222,
+        backgroundColor: 0xefebd5,
         scene: [
             Preloader,
+            StartMenu,
             Level,
             Test
         ],

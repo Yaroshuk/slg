@@ -44,7 +44,9 @@ class UI extends Phaser.GameObjects.Container {
         this.on('click', this.handleClick);
     }
 
-    handleClick() {}
+    handleClick() {
+        this.config.handleClick();
+    }
 
     handleOver() {}
 
