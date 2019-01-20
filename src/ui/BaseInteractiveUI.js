@@ -1,10 +1,14 @@
 const defaultConfig = {};
 
-class UI extends Phaser.GameObjects.Container {
+class BaseInteractiveUI extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config) {
         super(scene, x, y);
 
         this.pointerDown = false;
+
+        this.YY = config.center 
+                            ? y - config.height/2
+                            : y;
 
         //TODO:refactor
 
@@ -13,7 +17,17 @@ class UI extends Phaser.GameObjects.Container {
     }
 
     create() {
-        this.scene.children.add(this);
+
+        if (this.config.center) {
+            this.x -= this.config.width/2;
+            this.y -= this.config.height/2;
+        } 
+
+        if (this.config.parent === 'scene') {
+            this.scene.children.add(this);
+        } else {
+            this.config.parent.add(this);
+        }
     }
 
     addInteractive(config) {
@@ -57,4 +71,4 @@ class UI extends Phaser.GameObjects.Container {
     handleUp() {}
 }
 
-export default UI;
+export default BaseInteractiveUI;

@@ -19,6 +19,31 @@ export const drawIconTriangle = (graph, width, height, iWidth, iHeight, color = 
     return graph;
 }
 
+export const drawScreenCover = (scene) => {
+    const graph = new Phaser.GameObjects.Graphics(scene);
+
+    graph.clear();
+    graph.fillStyle(0xffffff, 0.5);
+    graph.lineStyle(0, 0xffffff);
+    graph.fillRect(0, 0, scene.game.config.width, scene.game.config.height);
+
+    return graph;
+}
+
+export const drawModalBackground = (scene, height, color) => {
+    const graph = new Phaser.GameObjects.Graphics(scene);
+
+    const width = scene.game.config.width - 60;
+
+    graph.clear();
+    graph.fillStyle(0xeeeeee);
+    graph.lineStyle(2, 0x000000);
+    graph.fillRoundedRect(0, 0, width, height, 10);
+    graph.strokeRoundedRect(1, 1,width - 2,height - 2, 10);
+
+    return graph;
+}
+
 export const drawButton = (scene, width, height, color) => {
     const graph = new Phaser.GameObjects.Graphics(scene);
 

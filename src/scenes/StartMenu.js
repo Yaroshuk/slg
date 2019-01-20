@@ -1,10 +1,18 @@
 import BaseScene from './BaseIsoScene';
 import {drawIconTriangle} from '../utils/graphics';
 import Button from '../ui/Button';
+import Modal from '../ui/Modal';
 
 class StartMenu extends BaseScene {
     constructor() {
         super({key: 'StartMenu'})
+
+        this.modal;
+        this.button;
+    }
+
+    update() {
+        super.update();
     }
 
     create() {
@@ -25,9 +33,9 @@ class StartMenu extends BaseScene {
             }
         }
 
-        const button = new Button(this, width/2 - startButtonConfig.width/2, height/2, startButtonConfig);
+        this.button = new Button(this, width/2 - startButtonConfig.width/2, height/2, startButtonConfig);
 
-        console.log(this.game);
+        this.modal = new Modal(this);
     }
 }
 

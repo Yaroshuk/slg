@@ -1,4 +1,5 @@
-import UI from './UI';
+import BaseInteractiveUI from './BaseInteractiveUI';
+import BaseInteractiveObject from './BaseInteractiveObject';
 import {drawButton, drawButtonOver, drawButtonDown} from '../utils/graphics';
 
 const defaultConfig = {
@@ -8,6 +9,8 @@ const defaultConfig = {
     color: 'green',
     type: 'text',
     text: 'Play',
+    parent: 'scene',
+    center: false,
     icon: {
         func: () => {},
         width: 25,
@@ -16,11 +19,9 @@ const defaultConfig = {
     }
 }
 
-class Button extends UI {
+class Button extends BaseInteractiveUI {
     constructor(scene, x, y, config) {    
         super(scene, x, y, Object.assign({}, defaultConfig, config));
-
-        this.YY = y;
 
         this.graph;
         this.text;
@@ -109,7 +110,7 @@ class Button extends UI {
         this.text.y = this.config.height/2 - this.text.height/2;
     }
 
-    handleOver() {
+    handleOver() { //TODO: fix event system 
         this.setVisibleBackground(1);
 
         this.y = this.YY + 3;
