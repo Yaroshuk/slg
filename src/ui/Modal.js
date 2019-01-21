@@ -2,12 +2,14 @@ import {drawModalBackground, drawScreenCover} from '../utils/graphics';
 import Button from './Button';
 
 const defaultConfig = {
-    height: 200,
+    startState: 'close',
+    height: 150,
     color: 'green',
-    name: 'Play'
+    name: ''
 }
 
-const controllHeight = 80;
+const headerHeight = 50;
+const controllHeight = 100;
 
 class BaseModal extends Phaser.GameObjects.Container {
     constructor(scene, config) {    
@@ -18,9 +20,10 @@ class BaseModal extends Phaser.GameObjects.Container {
         this.YY = 80;
         this.XX = 30;
 
-        this.H = this.config.height + controllHeight;
+        this.H = this.config.height + controllHeight + headerHeight;
         this.W = scene.game.config.width - 60;
 
+        this.text;
         this.screenCover;
         this.container;
         this.background;
@@ -52,13 +55,19 @@ class BaseModal extends Phaser.GameObjects.Container {
         this.add(this.screenCover);
         this.add(this.container);
         this.container.add(this.background);
+        this.container.add(this.text);
 
-        this.addButton();
+        if (this.config.startState === 'close') {
+            this.close();
+        }
     }
 
     backgroundInitial() {
         this.screenCover = drawScreenCover(this.scene);
-        this.background = drawModalBackground(this.scene, this.config.height + controllHeight);
+        this.background = drawModalBackground(this.scene, this.H, this.config.name ? headerHeight : 0);
+        this.text = new Phaser.GameObjects.Text(this.scene, this.x, this.y, this.config.name, {fontFamily: 'sans-serif', fontSize: '30px', color: '#000'});
+        this.text.y = headerHeight/2 - 15;
+        this.text.x = this.W/2 - this.text.width/2;
     }
 
     open() {
@@ -71,35 +80,32 @@ class BaseModal extends Phaser.GameObjects.Container {
         this.setVisible(false);
     }
 
-    addButton(buttons = [{}, {}, {}]) {
+    addButton(buttons = [{}, {}, {}, {}, {}]) {
 
-        const startButtonConfig = { //TODO: fix button origin
+        if (!buttons || !buttons.length) return;
+
+        let length = buttons.length > 3 
+                                    ? 3
+                                    : buttons.length;
+
+        const defaultConfig = { //TODO: fix button origin
             handleClick: () => {
-                this.close();
+                console.log('Click')
             },
-            width: 80,
-            height: 40,
+            width: 90,
+            height: 50,
             type: 'text',
             center: true,
-            parent: this,
-            depth: 1100
+            parent: this
         }
 
-        switch(buttons.length) {
-            case 1: {
-                let button = new Button(this.scene, this.container.x + this.W/2,this.container.y + this.H - 40, startButtonConfig);
-            } break;
+        let YY = this.container.y + this.H - 60;
 
-            case 2: {
-                let button = new Button(this.scene, this.container.x + this.W/3,this.container.y + this.H - 40, startButtonConfig);
-                let button2 = new Button(this.scene, this.container.x + this.W/3 * 2,this.container.y + this.H - 40, startButtonConfig);
-            } break;
+        for(let i = 0, max = length; i<max; i++) {
 
-            case 3: {
-                let button = new Button(this.scene, this.container.x + this.W/4,this.container.y + this.H - 40, startButtonConfig);
-                let button2 = new Button(this.scene, this.container.x + this.W/4 * 2,this.container.y + this.H - 40, startButtonConfig);
-                let button3 = new Button(this.scene, this.container.x + this.W/4 * 3,this.container.y + this.H - 40, startButtonConfig);
-            } break;
+            let XX = this.container.x + this.W/(length+1) * (i+1);
+
+            new Button(this.scene, XX, YY, Object.assign({}, defaultConfig, buttons[i]));
         }
     }
 }

@@ -6,15 +6,42 @@ export const textures = {
 }
 
 const colors = {
-    'green': 0x1cba76,
-    'greenIso': 0x27f69d,
+    'greenIso': 0x1cba76,
+    'green': 0x27f69d,
     'blue': 0x21c6c1,
     'blueIso': 0x27e9f6
 }
 
 export const drawIconTriangle = (graph, width, height, iWidth, iHeight, color = 0xffffff) => {
     graph.fillStyle(color);
-    graph.fillTriangle(width/2 - iWidth/2, height/2 - iHeight/2, width/2 + iWidth/2, height/2, width/2 - iWidth/2, height/2 + iHeight/2);
+    graph.fillTriangle(width/2 - iWidth/2, height/2 - iHeight/2, width/2 + iWidth/2, height/2, width/2 - iWidth/2, height/2 + iHeight/2); //TODO: fix
+
+    return graph;
+}
+
+export const drawIconRest = (graph, width, height, iWidth, iHeight, color = 0xffffff, baseColor) => { //TODO: fix triangle icon
+    const weight = iHeight/2 - iHeight/3;
+    const triangleSide = iHeight/2 - weight/2;
+    
+    graph.fillStyle(color);
+    graph.fillCircle(width/2, height/2, iWidth/2); //TODO: fix
+    graph.fillStyle(colors[baseColor]);
+    graph.fillCircle(width/2, height/2, iWidth/3); //TODO: fix
+    // graph.fillStyle(color);
+    // graph.fillTriangle(width/2, height/2 - weight, width/2 + triangleSide * 2, height/2 - weight, width/2 + triangleSide, height/2 + triangleSide - weight);
+
+    return graph;
+}
+
+export const drawIconMenu = (graph, width, height, iWidth, iHeight, color = 0xffffff, baseColor) => {
+    
+    const lineHeight = iHeight/5;
+
+    graph.fillStyle(color);
+    graph.fillRect(width/2 - iWidth/2, height/2 - iHeight/2, iWidth, iHeight); //TODO: fix
+    graph.fillStyle(colors[baseColor]);
+    graph.fillRect(width/2 - iWidth/2, height/2 - lineHeight * 1.5, iWidth, lineHeight);
+    graph.fillRect(width/2 - iWidth/2, height/2 + lineHeight/2, iWidth, lineHeight);
 
     return graph;
 }
@@ -30,7 +57,7 @@ export const drawScreenCover = (scene) => {
     return graph;
 }
 
-export const drawModalBackground = (scene, height, color) => {
+export const drawModalBackground = (scene, height, headerHeight = null) => {
     const graph = new Phaser.GameObjects.Graphics(scene);
 
     const width = scene.game.config.width - 60;
@@ -40,6 +67,10 @@ export const drawModalBackground = (scene, height, color) => {
     graph.lineStyle(2, 0x000000);
     graph.fillRoundedRect(0, 0, width, height, 10);
     graph.strokeRoundedRect(1, 1,width - 2,height - 2, 10);
+
+    if (headerHeight) {
+        graph.lineBetween(20, headerHeight, width-20, headerHeight);
+    }
 
     return graph;
 }
@@ -53,10 +84,10 @@ export const drawButton = (scene, width, height, color) => {
     let trianHeight = height * 0.25; 
 
     graph.clear();
-    graph.fillStyle(colors[color]);
+    graph.fillStyle(colors[color + 'Iso']);
     graph.lineStyle(2, 0xffffff);
     graph.fillRoundedRect(0, isoHeight, width, height, 10);
-    graph.fillStyle(colors[color + 'Iso']);
+    graph.fillStyle(colors[color]);
     graph.fillRoundedRect(0, 0, width, height, 10);
     graph.strokeRoundedRect(1, 1, width - 2, height - 2, 10);
 
@@ -69,10 +100,10 @@ export const drawButtonOver = (scene, width, height, color) => {
     let isoHeight = height * 0.3 - 3; //TODO: refactor
 
     graph.clear();
-    graph.fillStyle(colors[color]);
+    graph.fillStyle(colors[color + 'Iso']);
     graph.lineStyle(2, 0xffffff);
     graph.fillRoundedRect(0, isoHeight, width, height, 10);
-    graph.fillStyle(colors[color + 'Iso']);
+    graph.fillStyle(colors[color]);
     graph.fillRoundedRect(0, 0, width, height, 10);
     graph.strokeRoundedRect(1, 1, width - 2, height - 2, 10);
 
@@ -85,9 +116,9 @@ export const drawButtonDown = (scene, width, height, color) => {
     let isoHeight = height * 0.3; //TODO: refactor
 
     graph.clear();
-    graph.fillStyle(colors[color]);
-    graph.lineStyle(2, 0xffffff);
     graph.fillStyle(colors[color + 'Iso']);
+    graph.lineStyle(2, 0xffffff);
+    graph.fillStyle(colors[color]);
     graph.fillRoundedRect(0, 0, width, height, 10);
     graph.strokeRoundedRect(1, 1, width - 2, height - 2, 10);
 

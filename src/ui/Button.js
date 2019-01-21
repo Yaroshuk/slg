@@ -8,7 +8,7 @@ const defaultConfig = {
     height: 70,
     color: 'green',
     type: 'text',
-    text: 'Play',
+    text: '',
     parent: 'scene',
     center: false,
     icon: {
@@ -54,7 +54,7 @@ class Button extends BaseInteractiveUI {
 
         console.log(icon);
 
-        return iconFunction(result, this.config.width, this.config.height, icon.width, icon.height, icon.color);
+        return iconFunction(result, this.config.width, this.config.height, icon.width, icon.height, icon.color, this.config.color);
     }
 
     backgroundInitial() {

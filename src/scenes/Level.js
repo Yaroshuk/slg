@@ -2,6 +2,7 @@ import BaseScene from './BaseIsoScene';
 import Consts from '../utils/consts';
 import Grid from '../grid/Grid';
 import graphicsGenerator, {drawIconTriangle} from '../utils/graphics';
+import ModalLevelCompleted from '../ui/ModalLevelCompleted';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
@@ -39,6 +40,8 @@ class Level extends BaseScene {
         this.borderOffset = 25;
         this.topOffset = 50;
 
+        this.modalLevelCompleted;
+
         this.grid;
 
         this.handlePlayerFinished = this.handlePlayerFinished.bind(this);
@@ -51,6 +54,8 @@ class Level extends BaseScene {
 
     create() {
         this.levelGenerator();
+
+        this.modalLevelCompleted = new ModalLevelCompleted(this);
     }
 
     update() {
@@ -136,7 +141,7 @@ class Level extends BaseScene {
         this.grid.creator.wall(x, y);
 
         if (!this.players.length) {
-            console.log('Complete');
+            this.modalLevelCompleted.open();
         }
     }
 }

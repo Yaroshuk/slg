@@ -1,7 +1,6 @@
 import BaseScene from './BaseIsoScene';
 import {drawIconTriangle} from '../utils/graphics';
 import Button from '../ui/Button';
-import Modal from '../ui/Modal';
 
 class StartMenu extends BaseScene {
     constructor() {
@@ -34,8 +33,6 @@ class StartMenu extends BaseScene {
         }
 
         this.button = new Button(this, width/2 - startButtonConfig.width/2, height/2, startButtonConfig);
-
-        this.modal = new Modal(this);
     }
 }
 
