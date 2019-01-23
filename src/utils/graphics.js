@@ -22,13 +22,14 @@ export const drawIconTriangle = (graph, width, height, iWidth, iHeight, color = 
 export const drawIconRest = (graph, width, height, iWidth, iHeight, color = 0xffffff, baseColor) => { //TODO: fix triangle icon
     const weight = iHeight/2 - iHeight/3;
     const triangleSide = iHeight/2 - weight/2;
+    const radius = iHeight/2;
     
     graph.fillStyle(color);
     graph.fillCircle(width/2, height/2, iWidth/2); //TODO: fix
     graph.fillStyle(colors[baseColor]);
     graph.fillCircle(width/2, height/2, iWidth/3); //TODO: fix
-    // graph.fillStyle(color);
-    // graph.fillTriangle(width/2, height/2 - weight, width/2 + triangleSide * 2, height/2 - weight, width/2 + triangleSide, height/2 + triangleSide - weight);
+    graph.fillStyle(color);
+    graph.fillTriangle(width/2, height/2,width/2 + radius * Math.cos(0 * Math.PI/180), height/2 + radius * Math.sin(0 * Math.PI/180), width/2 + radius * Math.cos(40 * Math.PI/180), height/2 + radius * Math.sin(40 * Math.PI/180));
 
     return graph;
 }
