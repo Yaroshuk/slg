@@ -10,7 +10,7 @@ class Preloader extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start('StartMenu', {level: 1});
+        this.scene.start('StartMenu');
     }
 }
 

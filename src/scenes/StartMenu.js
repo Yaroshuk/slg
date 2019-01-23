@@ -19,7 +19,8 @@ class StartMenu extends BaseScene {
 
         const startButtonConfig = { //TODO: fix button origin
             handleClick: () => {
-                this.scene.start('Level', {level: 1});
+                console.log(this.scene)
+                this.scene.start('Level', {level: 0});
             },
             width: 200,
             height: 140,

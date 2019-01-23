@@ -1,5 +1,6 @@
 import BaseModal from './Modal'; //TODO: Modal to BaseModal
 import {drawIconTriangle, drawIconRest, drawIconMenu} from '../utils/graphics';
+import {isLastLevel} from '../utils/levels';
 
 class ModalLevelCompleted extends BaseModal {
     constructor(scene) {
@@ -12,7 +13,8 @@ class ModalLevelCompleted extends BaseModal {
         const buttonsConfig = [
             {
                 handleClick: () => {
-                    console.log('Menu')
+                    this.close();
+                    this.scene.scene.start('StartMenu');
                 },
                 type: 'icon', 
                 icon: {
@@ -24,7 +26,9 @@ class ModalLevelCompleted extends BaseModal {
             },
             {
                 handleClick: () => {
-                    console.log('Rest')
+                    const {currentLevel} = this.scene;
+                    this.close();
+                    this.scene.scene.start('Level', {level: currentLevel});
                 },
                 type: 'icon', 
                 icon: {
@@ -36,7 +40,14 @@ class ModalLevelCompleted extends BaseModal {
             },
             {
                 handleClick: () => {
-                    console.log('Next')
+                    const {currentLevel} = this.scene;
+
+                    this.close();
+                    if (isLastLevel(currentLevel)) {
+                        this.scene.scene.start('StartMenu');
+                    } else {
+                        this.scene.scene.start('Level', {level: currentLevel+1});
+                    }
                 },
                 type: 'icon', 
                 icon: {

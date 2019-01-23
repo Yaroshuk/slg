@@ -80,7 +80,7 @@ class BaseModal extends Phaser.GameObjects.Container {
         this.setVisible(false);
     }
 
-    addButton(buttons = [{}, {}, {}, {}, {}]) {
+    addButton(buttons) {
 
         if (!buttons || !buttons.length) return;
 

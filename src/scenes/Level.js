@@ -3,6 +3,7 @@ import Consts from '../utils/consts';
 import Grid from '../grid/Grid';
 import graphicsGenerator, {drawIconTriangle} from '../utils/graphics';
 import ModalLevelCompleted from '../ui/ModalLevelCompleted';
+import {getLevel} from '../utils/levels';
 import WallBlock from '../objects/WallBlock';
 import PlayerBlock from '../objects/PlayerBlock';
 import PlayerControl from '../objects/PlayerControl';
@@ -12,26 +13,12 @@ class Level extends BaseScene {
     constructor() {
         super({key: 'Level'})
 
-        this.testLevel = [
-            ['1', '1', '1', '1', '1'],
-            ['1', '0', 'F', '0', '1'],
-            ['1', '0', 'X', '0', '1'],
-            ['1', '0', '0', '1', '1'],
-            ['1', '1', '0', '1', '1'],
-            ['1', '1', '0', '0', '1'],
-            ['1', '0', 'X', '0', '1'],
-            ['1', '1', '1', 'F', '1'],
-            ['1', '1', '1', '1', '1'],
-            ['1', '1', '1', '1', '1'],
-            ['1', '1', '1', '1', '1'],
-            ['1', '1', '1', '1', '1']
-        ]
+        this.currentLevel;
 
         this.controllerActive = false;
         this.players = [];
 
-        this.previousLevelState = this.testLevel;
-        this.currentLevelState = this.testLevel;
+        this.currentLevelState;
 
         this.solidBlocks = '1X';
 
@@ -48,6 +35,11 @@ class Level extends BaseScene {
     }
 
     preload() {
+        this.currentLevel = this.scene.settings.data.level || 0;
+
+        this.currentLevelState = getLevel(this.currentLevel);
+
+
         this.levelSetup();
         graphicsGenerator(this, this.baseSize, this.isoHeight);
     }
@@ -67,8 +59,8 @@ class Level extends BaseScene {
         this.gameW = game.config.width;
         this.gameH = game.config.height;
 
-        this.gridH = this.testLevel.length;
-        this.gridW = this.testLevel[0].length;
+        this.gridH = this.currentLevelState.length;
+        this.gridW = this.currentLevelState[0].length;
 
         const maxWidth = this.gameW - this.borderOffset * 2;
         const maxHeight = this.gameH - (this.topOffset + this.borderOffset * 2);
@@ -114,7 +106,7 @@ class Level extends BaseScene {
 
         this.grid = new Grid(this, this.gridW, this.gridH, {size: this.baseSize, isoHeight: this.isoHeight, x: gridX, y: gridY});
 
-        this.testLevel.forEach((levelLine, yInx) => {
+        this.currentLevelState.forEach((levelLine, yInx) => {
             levelLine.forEach((code, xInx) => {
                 if (code === Consts.objectKeys.player) {
                     this.players.push(this.grid.creator.createFromKey(code, xInx, yInx));
